@@ -1,0 +1,29 @@
+PA1 - Programming Assignment #1
+CSCI 3753: Operating Systems
+Josh Fermin And Louis Bouddhou
+
+1. One advantage of having a loadable kernel module (LKM) instead of directly modifying the kernel would be to extend functionality on demand. In other words, if new functionality is required, instead of having to keep the functionality in the kernel (which wastes space), we can just add that functionality in a loadable kernel module. From this loadable kernel module we can add the functionality straight into the kernel without having to reboot the whole machine. If we had to modify the kernel directly to include the new functionality, we would have to reboot the whole machine in order to have access to the functionality.
+
+2. To compile the LKM we have to set up a makefile as follows:
+	obj-m += rkit.o
+
+	KDIR = /usr/src/linux-headers-3.13.0-34-generic
+
+	all:
+		$(MAKE) -C $(KDIR) SUBDIRS=$(PWD) modules
+
+	clean:
+		rm -rf *.o *.ko *.mod *.sysmvers *.order
+
+Once this is created, all we have to do is issue the command make in the working directory where rkit.c is and it will use then use the makefile to execute. This gives the following output: 
+	user@cu-cs-vm:~/Dropbox/OS/Assignments/Lab1$ make
+	make -C /usr/src/linux-headers-3.13.0-34-generic SUBDIRS=/home/user/Dropbox/OS/Assignments/Lab1 modules
+	make[1]: Entering directory `/usr/src/linux-headers-3.13.0-34-generic'
+	  CC [M]  /home/user/Dropbox/OS/Assignments/Lab1/rkit.o
+	  Building modules, stage 2.
+	  MODPOST 1 modules
+	  CC      /home/user/Dropbox/OS/Assignments/Lab1/rkit.mod.o
+	  LD [M]  /home/user/Dropbox/OS/Assignments/Lab1/rkit.ko
+	make[1]: Leaving directory `/usr/src/linux-headers-3.13.0-34-generic'
+
+3.
