@@ -1,1 +1,0 @@
-cmd_/home/user/Dropbox/OS/Assignments/Lab1/Module/rkit.ko := ld -r -m elf_x86_64 -T /usr/src/linux-headers-3.13.0-34-generic/scripts/module-common.lds --build-id  -o /home/user/Dropbox/OS/Assignments/Lab1/Module/rkit.ko /home/user/Dropbox/OS/Assignments/Lab1/Module/rkit.o /home/user/Dropbox/OS/Assignments/Lab1/Module/rkit.mod.o

