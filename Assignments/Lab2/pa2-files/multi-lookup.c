@@ -29,7 +29,7 @@ pthread_cond_t full;
 // Thread that reads files that have web addresses on it
 // and pushes them onto a shared buffer 
 void* producer(void* a){
-	// printf("hi");
+
 	if (DEBUG) {
 		fprintf((stderr), "starting producer thread: \n");
 	}
@@ -48,15 +48,16 @@ void* producer(void* a){
 		return NULL;
 	}
 
+	// size of what you want to malloc
 	char hostname[MAX_NAME_LENGTH];
 	while(fscanf(input_fp, "%s", hostname) > 0){ // while you have successfully filled more than 0 items of the argument list
 		int hostsize = sizeof(hostname);
 		char* hostpointer = malloc(hostsize);
 		// One reason to dynamically allocate memory is to effectively use the memory of the computer, 
 		// another is to prevent the memory from going out of scope before you are done with it.
-		strncpy(hostpointer, hostname, hostsize);
+		strncpy(hostpointer, hostname, hostsize); // now point to the host name
+		
 		pthread_mutex_lock(&buffer_mutex);
-
 		// While queue is not full, keep pushing names onto the queue
 		// if queue is full condition wait on the full variable
 		while((queue_push(args->buffer, hostpointer)) == QUEUE_FAILURE) {
@@ -91,7 +92,7 @@ void* consumer(void* a)
 		// while queue is not empty, keep popping off from the queue
 		// if queue empty (NULL) then do one of two things
 		while( (hostnamep = queue_pop(args->rqueue)) == NULL) {
-			// if all consumer threads are done, just return]
+			// if buffer is done being added to, just return
 			if (buffer_finished) {
 				pthread_mutex_unlock(&buffer_mutex);
 				return NULL;
@@ -117,7 +118,7 @@ void* consumer(void* a)
 	       == UTIL_FAILURE){
 		fprintf(stderr, "dnslookup error: %s\n", hostname);
 		strncpy(ipstring, "", sizeof(ipstring));
-	    }
+	    } 
 
 	    // When done getting IP string, lock output file mutex,
 	    // write to output file, and unlock output file mutex:
@@ -125,7 +126,7 @@ void* consumer(void* a)
 	    pthread_mutex_lock(&output_mutex);
 	    fprintf(args->outputfp, "%s,%s\n", hostname, ipstring);
 	    pthread_mutex_unlock(&output_mutex);
-	}
+	} 
 }
 
 int main(int argc, char* argv[]){
@@ -160,10 +161,10 @@ int main(int argc, char* argv[]){
 	}
 
 	// CREATE PRODUCER THREADS
-	thread_request_arg_t req_args[argc-2]; // length of # of input files
+	thread_request_arg_t req_args[argc-1]; // length of # of input files
     for(i=1; i<(argc-1); i++){ // until the last file
         req_args[i-1].fname = argv[i]; // get the file name
-        req_args[i-1].buffer = &buffer; // add request to each thread
+        req_args[i-1].buffer = &buffer; // add the shared buffer to each thread
         // creating threads for each request 
 		int rc = pthread_create(&(producer_threads[i-1]), NULL, producer, &(req_args[i-1])); 
 		if (rc){
@@ -191,7 +192,10 @@ int main(int argc, char* argv[]){
 			fprintf(stderr, "ERROR: on producer thread join");
 		}
     }
+
     buffer_finished = true;
+
+
     // WAIT FOR CONSUMER THREADS TO FINISH:
     for(i=0; i<MAX_RESOLVER_THREADS; i++){
 		int rv = pthread_join(consumer_threads[i],NULL);
