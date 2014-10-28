@@ -28,6 +28,7 @@
 #define DEFAULT_OUTPUTFILENAMEBASE "rwoutput"
 #define DEFAULT_BLOCKSIZE 1024
 #define DEFAULT_TRANSFERSIZE 1024*100
+#define DEFAULT_NUM_PROCESSES 5
 
 int main(int argc, char* argv[]){
 
@@ -51,6 +52,51 @@ int main(int argc, char* argv[]){
     int totalWrites = 0;
     int inputFileResets = 0;
     
+    int numberOfProcesses;
+    int policy; // used schedulers
+
+ 	if(argc < 2){
+    iterations = DEFAULT_ITERATIONS;
+    }
+    /* Set default policy if not supplied */
+    if(argc < 3){
+    policy = SCHED_OTHER;
+    }
+    /* Set iterations if supplied */
+    if(argc > 1){
+    iterations = atol(argv[1]);
+    if(iterations < 1){
+        fprintf(stderr, "Bad iterations value\n");
+        exit(EXIT_FAILURE);
+    }
+    }
+    /* Set policy if supplied */
+    if(argc > 2){
+        if(!strcmp(argv[2], "SCHED_OTHER")){
+            policy = SCHED_OTHER;
+        }
+        else if(!strcmp(argv[2], "SCHED_FIFO")){
+            policy = SCHED_FIFO;
+        }
+        else if(!strcmp(argv[2], "SCHED_RR")){
+            policy = SCHED_RR;
+        }
+        else{
+            fprintf(stderr, "Unhandeled scheduling policy\n");
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    if(argc > 3) {
+        numberOfProcesses = atoi(argv[3]);
+        if(numberOfProcesses < 1 || numberOfProcesses > 1000){
+            exit(EXIT_FAILURE);
+        }
+    }
+    else {
+        numberOfProcesses = DEFAULT_NUM_PROCESSES;
+    }
+
     /* Process program arguments to select run-time parameters */
     /* Set supplied transfer size or default if not supplied */
     if(argc < 2){

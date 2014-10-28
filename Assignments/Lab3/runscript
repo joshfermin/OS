@@ -1,0 +1,90 @@
+#/!/bin/bash
+
+#File: testscript
+#Author: Josh Fermin and Louis Bouddhou
+#Project: CSCI 3753 Programming Assignment 3
+#Create Date: 2012/03/09
+#Modify Date: 2012/03/21
+
+ITERATIONS=10000000
+BYTESTOCOPY=102400
+BLOCKSIZE=1024
+TIMEFORMAT="wall=%e user=%U system=%S CPU=%P i-switched=%c v-switched=%w"
+MAKE="make -s"
+
+echo Building code...
+$MAKE clean
+$MAKE
+
+echo Gathering data:
+
+echo Starting CPU Bound Tests....
+echo Calculating pi over $ITERATIONS iterations 
+
+echo Clearing out data folder..
+rm data/*
+
+
+
+
+echo Starting small benchmark test with 7 processes...
+for i in `seq 1 10`
+do
+/usr/bin/time -v -o data/OTHER_SMALL_CPU.txt -a sudo ./pi-sched $ITERATIONS SCHED_OTHER 7 > /dev/null
+done
+
+for i in `seq 1 10`
+do
+/usr/bin/time -f "$TIMEFORMAT" -o data/FIFO_SMALL_CPU.txt -a sudo ./pi-sched $ITERATIONS SCHED_FIFO 7 > /dev/null
+done
+
+for i in `seq 1 10`
+do
+/usr/bin/time -f "$TIMEFORMAT" -o data/RR_SMALL_CPU.txt -a sudo ./pi-sched $ITERATIONS SCHED_RR 7 > /dev/null
+done
+
+
+
+
+echo Starting medium benchmark test with 70 processes...
+for i in `seq 1 10`
+do
+/usr/bin/time -f "$TIMEFORMAT" -o data/RR_MEDIUM_CPU.txt -a sudo ./pi-sched $ITERATIONS SCHED_RR 70 > /dev/null
+done
+
+for i in `seq 1 10`
+do
+/usr/bin/time -f "$TIMEFORMAT" -o data/RR_MEDIUM_CPU.txt -a sudo ./pi-sched $ITERATIONS SCHED_RR 70 > /dev/null
+done
+
+for i in `seq 1 10`
+do
+/usr/bin/time -f "$TIMEFORMAT" -o data/RR_MEDIUM_CPU.txt -a sudo ./pi-sched $ITERATIONS SCHED_RR 70 > /dev/null
+done
+
+
+
+
+echo Starting large benchmark test with 700 processes...
+for i in `seq 1 10`
+do
+/usr/bin/time -f "$TIMEFORMAT" -o data/OTHER_LARGE_CPU.txt -a sudo ./pi-sched $ITERATIONS SCHED_OTHER 700 > /dev/null
+done
+
+for i in `seq 1 10`
+do
+/usr/bin/time -f "$TIMEFORMAT" -o data/FIFO_LARGE_CPU.txt -a sudo ./pi-sched $ITERATIONS SCHED_FIFO 700 > /dev/null
+done
+
+for i in `seq 1 10`
+do
+/usr/bin/time -f "$TIMEFORMAT" -o data/RR_LARGE_CPU.txt -a sudo ./pi-sched $ITERATIONS SCHED_RR 700 > /dev/null
+done
+
+
+
+echo Starting IO Bound Tests....
+
+
+
+
