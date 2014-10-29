@@ -104,18 +104,69 @@ done
 
 
 
-echo Starting medium IO Bound Tests....
+echo Starting medium benchmark IO Bound Tests....
 
 
 
 
 
-echo Starting large IO Bound Tests....
-
+echo Starting large benchmark IO Bound Tests....
 
 '
 
 
+echo Starting small benchmark for Mixed Bound Tests...
+for i in `seq 1 10`
+do
+/usr/bin/time -f "$TIMEFORMAT" -o data/OTHER_SMALL_MIXED.txt -a sudo ./mixed $ITERATIONS SCHED_OTHER 7 > /dev/null
+done
+
+for i in `seq 1 10`
+do
+/usr/bin/time -f "$TIMEFORMAT" -o data/FIFO_SMALL_MIXED.txt -a sudo ./mixed $ITERATIONS SCHED_FIFO 7 > /dev/null
+done
+
+for i in `seq 1 10`
+do
+/usr/bin/time -f "$TIMEFORMAT" -o data/RR_SMALL_MIXED.txt -a sudo ./mixed $ITERATIONS SCHED_RR 7 > /dev/null
+done
+
+
+
+echo Starting medium benchmark for Mixed Bound Tests...
+for i in `seq 1 10`
+do
+/usr/bin/time -f "$TIMEFORMAT" -o data/OTHER_MEDIUM_MIXED.txt -a sudo ./mixed $ITERATIONS SCHED_OTHER 70 > /dev/null
+done
+
+for i in `seq 1 10`
+do
+/usr/bin/time -f "$TIMEFORMAT" -o data/FIFO_MEDIUM_MIXED.txt -a sudo ./mixed $ITERATIONS SCHED_FIFO 70 > /dev/null
+done
+
+for i in `seq 1 10`
+do
+/usr/bin/time -f "$TIMEFORMAT" -o data/RR_MEDIUM_MIXED.txt -a sudo ./mixed $ITERATIONS SCHED_RR 70 > /dev/null
+done
+
+
+
+
+echo Starting large benchmark for Mixed Bound Tests...
+for i in `seq 1 10`
+do
+/usr/bin/time -f "$TIMEFORMAT" -o data/OTHER_LARGE_MIXED.txt -a sudo ./mixed $ITERATIONS SCHED_OTHER 700 > /dev/null
+done
+
+for i in `seq 1 10`
+do
+/usr/bin/time -f "$TIMEFORMAT" -o data/FIFO_LARGE_MIXED.txt -a sudo ./mixed $ITERATIONS SCHED_FIFO 700 > /dev/null
+done
+
+for i in `seq 1 10`
+do
+/usr/bin/time -f "$TIMEFORMAT" -o data/RR_LARGE_MIXED.txt -a sudo ./mixed $ITERATIONS SCHED_RR 700 > /dev/null
+done
 
 
 

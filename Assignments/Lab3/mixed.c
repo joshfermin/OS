@@ -16,6 +16,11 @@
 #include <math.h>
 #include <errno.h>
 #include <sched.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <fcntl.h>
 
 #define DEFAULT_ITERATIONS 1000000
 #define DEFAULT_NUM_PROCESSES 5
@@ -43,7 +48,6 @@ int main(int argc, char* argv[]){
     int pid; // process id
     int numberOfProcesses; // argument to specify how many processes to spawn 
     int k = 0; // used for loop to create each process
-    int j = 0; // used for loop to wait for each process to terminate
 
     /* Process program arguments to select iterations and policy */
     /* Set default iterations if not supplied */
@@ -139,6 +143,6 @@ int main(int argc, char* argv[]){
             wait(NULL);
         }
     }
-    close(f);
+    fclose(f);
     return 0;
 }

@@ -12,10 +12,15 @@
 /* Local Includes */
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
-#include <math.h>
-#include <errno.h>
 #include <sched.h>
+#include <unistd.h>
+#include <errno.h>
+#include <math.h>
+#include <fcntl.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/wait.h>
 
 #define DEFAULT_ITERATIONS 1000000
 #define DEFAULT_NUM_PROCESSES 5
