@@ -6,7 +6,7 @@
 #Create Date: 2012/03/09
 #Modify Date: 2012/03/21
 
-ITERATIONS=10000000
+ITERATIONS=100000
 BYTESTOCOPY=102400
 BLOCKSIZE=1024
 TIMEFORMAT="wall=%e user=%U system=%S CPU=%P i-switched=%c v-switched=%w"
@@ -26,12 +26,13 @@ rm data/*
 
 
 
-
+:'
 echo Starting small benchmark test with 7 processes...
 for i in `seq 1 10`
 do
-/usr/bin/time -v -o data/OTHER_SMALL_CPU.txt -a sudo ./pi-sched $ITERATIONS SCHED_OTHER 7 > /dev/null
+/usr/bin/time -f "$TIMEFORMAT" -o data/OTHER_SMALL_CPU.txt -a sudo ./pi-sched $ITERATIONS SCHED_OTHER 7 > /dev/null
 done
+
 
 for i in `seq 1 10`
 do
@@ -49,12 +50,12 @@ done
 echo Starting medium benchmark test with 70 processes...
 for i in `seq 1 10`
 do
-/usr/bin/time -f "$TIMEFORMAT" -o data/RR_MEDIUM_CPU.txt -a sudo ./pi-sched $ITERATIONS SCHED_RR 70 > /dev/null
+/usr/bin/time -f "$TIMEFORMAT" -o data/OTHER_MEDIUM_CPU.txt -a sudo ./pi-sched $ITERATIONS SCHED_OTHER 70 > /dev/null
 done
 
 for i in `seq 1 10`
 do
-/usr/bin/time -f "$TIMEFORMAT" -o data/RR_MEDIUM_CPU.txt -a sudo ./pi-sched $ITERATIONS SCHED_RR 70 > /dev/null
+/usr/bin/time -f "$TIMEFORMAT" -o data/FIFO_MEDIUM_CPU.txt -a sudo ./pi-sched $ITERATIONS SCHED_FIFO 70 > /dev/null
 done
 
 for i in `seq 1 10`
@@ -83,7 +84,38 @@ done
 
 
 
-echo Starting IO Bound Tests....
+echo Starting small IO Bound Tests....
+
+for i in `seq 1 10`
+do
+/usr/bin/time -f "$TIMEFORMAT" -o data/OTHER_SMALL_IO.txt -a sudo ./rw 7 SCHED_OTHER $BYTESTOCOPY $BLOCKSIZE > /dev/null
+done
+
+for i in `seq 1 10`
+do
+/usr/bin/time -f "$TIMEFORMAT" -o data/FIFO_SMALL_IO.txt -a sudo ./rw 7 SCHED_FIFO $BYTESTOCOPY $BLOCKSIZE > /dev/null
+done
+
+for i in `seq 1 10`
+do
+/usr/bin/time -f "$TIMEFORMAT" -o data/RR_SMALL_IO.txt -a sudo ./rw 7 SCHED_RR $BYTESTOCOPY $BLOCKSIZE > /dev/null
+done
+
+
+
+
+echo Starting medium IO Bound Tests....
+
+
+
+
+
+echo Starting large IO Bound Tests....
+
+
+'
+
+
 
 
 

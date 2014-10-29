@@ -43,23 +43,24 @@ int main(int argc, char* argv[]){
     int pid; // process id
     int numberOfProcesses; // argument to specify how many processes to spawn 
     int k = 0; // used for loop to create each process
+    int j = 0; // used for loop to wait for each process to terminate
 
     /* Process program arguments to select iterations and policy */
     /* Set default iterations if not supplied */
     if(argc < 2){
-    iterations = DEFAULT_ITERATIONS;
+        iterations = DEFAULT_ITERATIONS;
     }
     /* Set default policy if not supplied */
     if(argc < 3){
-    policy = SCHED_OTHER;
+        policy = SCHED_OTHER;
     }
     /* Set iterations if supplied */
     if(argc > 1){
-    iterations = atol(argv[1]);
-    if(iterations < 1){
-        fprintf(stderr, "Bad iterations value\n");
-        exit(EXIT_FAILURE);
-    }
+        iterations = atol(argv[1]);
+        if(iterations < 1){
+            fprintf(stderr, "Bad iterations value\n");
+            exit(EXIT_FAILURE);
+        }
     }
     /* Set policy if supplied */
     if(argc > 2){
@@ -100,6 +101,12 @@ int main(int argc, char* argv[]){
     }
     fprintf(stdout, "New Scheduling Policy: %d\n", sched_getscheduler(0));
 
+    FILE *f = fopen("junk.txt", "w");
+    if (f == NULL){
+        printf("ERROR OPENING FILE \n");
+        exit(1);
+    }
+
     for(k=0; k<numberOfProcesses; k++) {
         pid = fork();
         if (pid == 0) { 
@@ -119,6 +126,8 @@ int main(int argc, char* argv[]){
 
             /* Print result */
             fprintf(stdout, "pi = %f\n", piCalc);
+            fprintf(f, "%e\n", pCircle);
+            fprintf(f, "%e\n", piCalc);
 
             return 0;
         }
@@ -130,5 +139,6 @@ int main(int argc, char* argv[]){
             wait(NULL);
         }
     }
+    close(f);
     return 0;
 }
