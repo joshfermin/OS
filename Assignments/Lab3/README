@@ -20,6 +20,7 @@ handout - Assignment description and documentation
              a specific scheduling policy
 ./rw - A simple i/o bound example program.
 ./rr_quantum - A simple program for determing the RR quantum.
+bash runscript - A simple bash script used to test the different schedulers.
 
 ---Examples---
 Build:
@@ -41,12 +42,12 @@ pi-sched:
 rw:
  ./rw
  ./rw <Number of Processes>
- ./rw <Number of Processes> <
- ./rw <#Bytes to Write to Output File> <Block Size>
- ./rw <#Bytes to Write to Output File> <Block Size> <Input Filename> <Output Filename> 
+ ./rw <Number of Processes> <Scheduling Policy>
+ ./rw <Number of Processes> <Scheduling Policy> <#Bytes to Write to Output File> <Block Size>
+ ./rw <Number of Processes> <Scheduling Policy> <#Bytes to Write to Output File> <Block Size> <Input Filename> <Output Filename> 
 
 testscript:
  ./testscript
 
-rr_quantum:
- sudo ./rr_quantum
+runscript
+ bash runscript
