@@ -30,7 +30,6 @@ rm data/*
 #------------------------CPU BOUND-----------------------
 #--------------------------------------------------------
 
-:'
 echo Starting small benchmark test with 7 processes...
 for i in `seq 1 10`
 do
@@ -66,7 +65,6 @@ for i in `seq 1 10`
 do
 /usr/bin/time -f "$TIMEFORMAT" -o data/RR_MEDIUM_CPU.txt -a sudo ./pi-sched $ITERATIONS SCHED_RR 70 > /dev/null
 done
-'
 
 
 
@@ -92,7 +90,6 @@ done
 #------------------------IO BOUND------------------------
 #--------------------------------------------------------
 
-:'
 echo Starting small benchmark IO Bound Tests....
 
 for i in `seq 1 10`
@@ -127,7 +124,6 @@ for i in `seq 1 10`
 do
 /usr/bin/time -f "$TIMEFORMAT" -o data/RR_MEDIUM_IO.txt -a sudo ./rw 70 SCHED_RR $BYTESTOCOPY $BLOCKSIZE > /dev/null
 done
-'
 
 
 
@@ -152,8 +148,6 @@ done
 #--------------------------------------------------------
 #------------------------MIXED BOUND---------------------
 #--------------------------------------------------------
-
-:'
 echo Starting small benchmark for Mixed Bound Tests...
 for i in `seq 1 10`
 do
@@ -187,7 +181,6 @@ for i in `seq 1 10`
 do
 /usr/bin/time -f "$TIMEFORMAT" -o data/RR_MEDIUM_MIXED.txt -a sudo ./mixed $ITERATIONS SCHED_RR 70 > /dev/null
 done
-'
 
 
 
