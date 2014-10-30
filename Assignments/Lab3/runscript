@@ -26,6 +26,10 @@ rm data/*
 
 
 
+#--------------------------------------------------------
+#------------------------CPU BOUND-----------------------
+#--------------------------------------------------------
+
 :'
 echo Starting small benchmark test with 7 processes...
 for i in `seq 1 10`
@@ -62,29 +66,34 @@ for i in `seq 1 10`
 do
 /usr/bin/time -f "$TIMEFORMAT" -o data/RR_MEDIUM_CPU.txt -a sudo ./pi-sched $ITERATIONS SCHED_RR 70 > /dev/null
 done
+'
 
 
 
-
-echo Starting large benchmark test with 700 processes...
+echo Starting large benchmark test with 300 processes...
 for i in `seq 1 10`
 do
-/usr/bin/time -f "$TIMEFORMAT" -o data/OTHER_LARGE_CPU.txt -a sudo ./pi-sched $ITERATIONS SCHED_OTHER 700 > /dev/null
+/usr/bin/time -f "$TIMEFORMAT" -o data/OTHER_LARGE_CPU.txt -a sudo ./pi-sched $ITERATIONS SCHED_OTHER 300 > /dev/null
 done
 
 for i in `seq 1 10`
 do
-/usr/bin/time -f "$TIMEFORMAT" -o data/FIFO_LARGE_CPU.txt -a sudo ./pi-sched $ITERATIONS SCHED_FIFO 700 > /dev/null
+/usr/bin/time -f "$TIMEFORMAT" -o data/FIFO_LARGE_CPU.txt -a sudo ./pi-sched $ITERATIONS SCHED_FIFO 300 > /dev/null
 done
 
 for i in `seq 1 10`
 do
-/usr/bin/time -f "$TIMEFORMAT" -o data/RR_LARGE_CPU.txt -a sudo ./pi-sched $ITERATIONS SCHED_RR 700 > /dev/null
+/usr/bin/time -f "$TIMEFORMAT" -o data/RR_LARGE_CPU.txt -a sudo ./pi-sched $ITERATIONS SCHED_RR 300 > /dev/null
 done
 
 
 
-echo Starting small IO Bound Tests....
+#--------------------------------------------------------
+#------------------------IO BOUND------------------------
+#--------------------------------------------------------
+
+:'
+echo Starting small benchmark IO Bound Tests....
 
 for i in `seq 1 10`
 do
@@ -103,18 +112,48 @@ done
 
 
 
-
 echo Starting medium benchmark IO Bound Tests....
+for i in `seq 1 10`
+do
+/usr/bin/time -f "$TIMEFORMAT" -o data/OTHER_MEDIUM_IO.txt -a sudo ./rw 70 SCHED_OTHER $BYTESTOCOPY $BLOCKSIZE > /dev/null
+done
 
+for i in `seq 1 10`
+do
+/usr/bin/time -f "$TIMEFORMAT" -o data/FIFO_MEDIUM_IO.txt -a sudo ./rw 70 SCHED_FIFO $BYTESTOCOPY $BLOCKSIZE > /dev/null
+done
 
+for i in `seq 1 10`
+do
+/usr/bin/time -f "$TIMEFORMAT" -o data/RR_MEDIUM_IO.txt -a sudo ./rw 70 SCHED_RR $BYTESTOCOPY $BLOCKSIZE > /dev/null
+done
+'
 
 
 
 echo Starting large benchmark IO Bound Tests....
+for i in `seq 1 10`
+do
+/usr/bin/time -f "$TIMEFORMAT" -o data/OTHER_LARGE_IO.txt -a sudo ./rw 300 SCHED_OTHER $BYTESTOCOPY $BLOCKSIZE > /dev/null
+done
 
-'
+for i in `seq 1 10`
+do
+/usr/bin/time -f "$TIMEFORMAT" -o data/FIFO_LARGE_IO.txt -a sudo ./rw 300 SCHED_FIFO $BYTESTOCOPY $BLOCKSIZE > /dev/null
+done
+
+for i in `seq 1 10`
+do
+/usr/bin/time -f "$TIMEFORMAT" -o data/RR_LARGE_IO.txt -a sudo ./rw 300 SCHED_RR $BYTESTOCOPY $BLOCKSIZE > /dev/null
+done
 
 
+
+#--------------------------------------------------------
+#------------------------MIXED BOUND---------------------
+#--------------------------------------------------------
+
+:'
 echo Starting small benchmark for Mixed Bound Tests...
 for i in `seq 1 10`
 do
@@ -148,26 +187,23 @@ for i in `seq 1 10`
 do
 /usr/bin/time -f "$TIMEFORMAT" -o data/RR_MEDIUM_MIXED.txt -a sudo ./mixed $ITERATIONS SCHED_RR 70 > /dev/null
 done
-
+'
 
 
 
 echo Starting large benchmark for Mixed Bound Tests...
 for i in `seq 1 10`
 do
-/usr/bin/time -f "$TIMEFORMAT" -o data/OTHER_LARGE_MIXED.txt -a sudo ./mixed $ITERATIONS SCHED_OTHER 700 > /dev/null
+/usr/bin/time -f "$TIMEFORMAT" -o data/OTHER_LARGE_MIXED.txt -a sudo ./mixed $ITERATIONS SCHED_OTHER 300 > /dev/null
 done
 
 for i in `seq 1 10`
 do
-/usr/bin/time -f "$TIMEFORMAT" -o data/FIFO_LARGE_MIXED.txt -a sudo ./mixed $ITERATIONS SCHED_FIFO 700 > /dev/null
+/usr/bin/time -f "$TIMEFORMAT" -o data/FIFO_LARGE_MIXED.txt -a sudo ./mixed $ITERATIONS SCHED_FIFO 300 > /dev/null
 done
 
 for i in `seq 1 10`
 do
-/usr/bin/time -f "$TIMEFORMAT" -o data/RR_LARGE_MIXED.txt -a sudo ./mixed $ITERATIONS SCHED_RR 700 > /dev/null
+/usr/bin/time -f "$TIMEFORMAT" -o data/RR_LARGE_MIXED.txt -a sudo ./mixed $ITERATIONS SCHED_RR 300 > /dev/null
 done
-
-
-
 

@@ -20,7 +20,7 @@ $MAKE clean
 $MAKE
 
 echo Starting test runs...
-
+:'
 echo Calculating pi over $ITERATIONS iterations using SCHED_OTHER with 1 simultaneous process...
 /usr/bin/time -v ./pi-sched $ITERATIONS SCHED_OTHER > /dev/null
 
@@ -29,7 +29,7 @@ echo Calculating pi over $ITERATIONS iterations using SCHED_FIFO with 1 simultan
 
 echo Calculating pi over $ITERATIONS iterations using SCHED_RR with 1 simultaneous process...
 /usr/bin/time -f "$TIMEFORMAT" sudo ./pi-sched $ITERATIONS SCHED_RR > /dev/null
-
+'
 echo Copying $BYTESTOCOPY bytes in blocks of $BLOCKSIZE from rwinput to rwoutput
 echo using SCHED_OTHER with 1 simultaneous process...
-/usr/bin/time -f "$TIMEFORMAT" ./rw $BYTESTOCOPY $BLOCKSIZE > /dev/null
+/usr/bin/time -f "$TIMEFORMAT" sudo ./rw 10 SCHED_FIFO $BYTESTOCOPY $BLOCKSIZE > /dev/null

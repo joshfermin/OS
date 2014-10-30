@@ -61,6 +61,8 @@ int main(int argc, char* argv[]){
     ssize_t totalBytesWritten = 0;
     int totalWrites = 0;
     int inputFileResets = 0;
+
+    int pid;
     
     
     if(argc < 2){
@@ -77,19 +79,19 @@ int main(int argc, char* argv[]){
 
     /* Set policy if supplied */
     if(argc > 2){
-	if(!strcmp(argv[2], "SCHED_OTHER")){
-	    policy = SCHED_OTHER;
-	}
-	else if(!strcmp(argv[2], "SCHED_FIFO")){
-	    policy = SCHED_FIFO;
-	}
-	else if(!strcmp(argv[2], "SCHED_RR")){
-	    policy = SCHED_RR;
-	}
-	else{
-	    fprintf(stderr, "Unhandeled scheduling policy\n");
-	    exit(EXIT_FAILURE);
-	}
+		if(!strcmp(argv[2], "SCHED_OTHER")){
+		    policy = SCHED_OTHER;
+		}
+		else if(!strcmp(argv[2], "SCHED_FIFO")){
+		    policy = SCHED_FIFO;
+		}
+		else if(!strcmp(argv[2], "SCHED_RR")){
+		    policy = SCHED_RR;
+		}
+		else{
+		    fprintf(stderr, "Unhandeled scheduling policy\n");
+		    exit(EXIT_FAILURE);
+		}
     }   
     
     param.sched_priority = sched_get_priority_max(policy);
@@ -182,10 +184,10 @@ int main(int argc, char* argv[]){
 	exit(EXIT_FAILURE);
     }
     
-    /* FORK FORK FORK FORK FORK FORK FORK FORK FORK FORK FORK FORK*/
 	int k = 0; 
 	for (k = 0; k < numberOfProcesses; k++){
-		if (fork() == 0){
+		pid = fork();
+		if (pid == 0){
 			/* Open Output File Descriptor in Write Only mode with standard permissions*/
 			rv = snprintf(outputFilename, MAXFILENAMELENGTH, "%s-%d",
 				  outputFilenameBase, getpid());    
@@ -272,19 +274,14 @@ int main(int argc, char* argv[]){
 			}
 			return 0;
 		}
+		else if (pid < 0){
+            fprintf(stderr, "Error creating child process");
+            exit(EXIT_FAILURE);
+        }
+        else {
+            wait(NULL);
+        }
 	}
-	
-	int j;  
-	for (j = 0; j < numberOfProcesses; j++) {
-	pid_t wpid = wait(&child_status);
-
-		if (!WIFEXITED(child_status)){
-			printf("Child %d terminated abnormally\n", wpid);
-		}
-	}
-	
-    /* Close Input File Descriptor */
-    
 
     return EXIT_SUCCESS;
 }

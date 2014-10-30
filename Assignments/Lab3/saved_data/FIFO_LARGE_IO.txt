@@ -1,0 +1,20 @@
+Command exited with non-zero status 130
+wall=0.02 user=0.00 system=0.01 CPU=82% i-switched=10 v-switched=4
+Command exited with non-zero status 130
+wall=0.02 user=0.01 system=0.01 CPU=75% i-switched=10 v-switched=5
+Command exited with non-zero status 130
+wall=0.03 user=0.01 system=0.01 CPU=85% i-switched=16 v-switched=4
+Command terminated by signal 2
+wall=0.01 user=0.00 system=0.00 CPU=61% i-switched=5 v-switched=1
+Command exited with non-zero status 130
+wall=0.06 user=0.00 system=0.01 CPU=35% i-switched=16 v-switched=6
+Command terminated by signal 2
+wall=0.00 user=0.00 system=0.00 CPU=50% i-switched=2 v-switched=1
+Command exited with non-zero status 130
+wall=0.03 user=0.00 system=0.01 CPU=63% i-switched=8 v-switched=6
+Command terminated by signal 2
+wall=0.02 user=0.00 system=0.00 CPU=31% i-switched=6 v-switched=1
+Command exited with non-zero status 130
+wall=0.02 user=0.01 system=0.01 CPU=88% i-switched=12 v-switched=5
+Command exited with non-zero status 130
+wall=0.07 user=0.01 system=0.01 CPU=40% i-switched=13 v-switched=5
