@@ -1,0 +1,23 @@
+
+malloc1 gets to 200+ GiB
+malloc2 hangs at 1.3 GiB
+
+
+(With htop in other window running on topd's pid)
+topd: allocate 256*50000 = 12800000 ints
+(Only VIRT and DATA change)
+topd: now touch 256*10000 = 2560000 ints
+(Only RSS changes)
+
+$ cat /proc/sys/kernel/randomize_va_space
+2
+$ grep stack /proc/self/maps
+
+Show /proc/self/maps status pagemap (use pmap instead)
+
+Run $ mmapdemo 30 (or whatever) and when paused 
+look at /proc/<pid>/maps and note the mapped file has "shared"
+   flag on and is READ only (then see source that supports this).
+
+Silliness with ulimit -s 10
+
