@@ -46,11 +46,24 @@
 #include <sys/xattr.h>
 #endif
 
+// fuse_get_context
+// returns a pointer to the private data returned by init function
+// init function: init filesystem.
+#define ENC_DATA ((struct encrypt *) fuse_get_context()->private_data)
+
 // data structure that stores root directory and passphrase
-struct enc_state {
-	char *rootdir;
+struct encrypt {
+	char *root;
 	char *key;
 };
+
+// this function is directly related to the bbfs implementation listed in the pdf
+// makes the full path and not just the root dir
+static void xmp_fullpath(char fpath[PATH_MAX], const char *path)
+{
+    strcpy(fpath, ENC_DATA->root); // copy fpath to root dir.
+    strncat(fpath, path, PATH_MAX); // appends PATH_MAX chars from fpath to path
+}
 
 static int xmp_getattr(const char *path, struct stat *stbuf)
 {
