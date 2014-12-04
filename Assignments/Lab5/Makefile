@@ -29,6 +29,9 @@ fuse-examples: $(FUSE_EXAMPLES)
 xattr-examples: $(XATTR_EXAMPLES)
 openssl-examples: $(OPENSSL_EXAMPLES)
 
+pa5-encfs: pa5-encfs.o aes-crypt.o
+	$(CC) $(LFLAGS) $^ -o $@ $(LLIBSFUSE) $(LLIBSOPENSSL)
+
 fusehello: fusehello.o
 	$(CC) $(LFLAGS) $^ -o $@ $(LLIBSFUSE)
 
