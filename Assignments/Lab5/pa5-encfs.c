@@ -2,7 +2,6 @@
   Encrypted Filesystem using FUSE
 
   By: Josh Fermin
-
 */
 
 #define FUSE_USE_VERSION 28
@@ -39,12 +38,6 @@ struct encrypt {
 	char *root;
 	char *key;
 };
-
-// static int xmp_error(char* str)
-// {
-// 	int ret = -errorno;
-// 	log_msg("")
-// }
 
 //  All the paths I see are relative to the root of the mounted
 //  filesystem.  In order to get to the underlying filesystem, I need to
