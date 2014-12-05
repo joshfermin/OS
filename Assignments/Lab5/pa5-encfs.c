@@ -462,12 +462,16 @@ int main(int argc, char *argv[])
     }
 
     // check that there are more than 3 args i.e. pa5-encfs encryption_key mirror_dir mount_point
-    // if ((argc < 3) || (argv[argc-2][0] == '-') || (argv[argc-1][0] == '-')) {
-    // 	xmp_usage(); // if not show usage and abort
-    // }
+    if ((argc < 3) || (argv[argc-2][0] == '-') || (argv[argc-1][0] == '-')) {
+    	xmp_usage(); // if not show usage and abort
+    }
 
-    enc_data->root = realpath(arv[argc-2], NULL)
+    // will give path to directory to be mirrored/encrypted
+    // i.e.  mirror_dir in pa5-encfs encryption_key mirror_dir mount_point
+    enc_data->root = realpath(arv[argc-2], NULL) 
 
+    
+    
 	umask(0);
 	return fuse_main(argc, argv, &xmp_oper, NULL);
 }
