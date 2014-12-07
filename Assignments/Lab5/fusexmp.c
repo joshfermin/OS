@@ -34,6 +34,7 @@
 #define _XOPEN_SOURCE 500
 #endif
 
+#include "aes-crypt.h"
 #include <fuse.h>
 #include <stdio.h>
 #include <string.h>

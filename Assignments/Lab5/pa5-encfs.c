@@ -39,12 +39,6 @@ struct encrypt {
 	char *key;
 };
 
-//  All the paths I see are relative to the root of the mounted
-//  filesystem.  In order to get to the underlying filesystem, I need to
-//  have the mountpoint.  I'll save it away early on in main(), and then
-//  whenever I need a path for something I'll call this to construct
-//  it.
-
 // Need mount point - store in main and then when you need a path for something
 // call this function to create the path for you which will be relative to the
 // root of the mount point.
@@ -442,12 +436,25 @@ int main(int argc, char *argv[])
     	xmp_usage(); // if not show usage and abort
     }
 
+    // need space for the data
+    encrypt = malloc(sizeof(struct encrypt));
+    if (encrypt == NULL) {
+		perror("main calloc");
+		abort();
+    }
+
     // will give path to directory to be mirrored/encrypted
     // i.e.  mirror_dir in pa5-encfs encryption_key mirror_dir mount_point
-    enc_data->root = realpath(arv[argc-2], NULL) 
+    encrypt->root = realpath(arv[argc-2], NULL) 
 
+    // 
+    encrypt->key = argv[argc-3];
+	argv[argc-3] = argv[argc-1];
+    argv[argc-2] = NULL;
+    argv[argc-1] = NULL;
+    argc -= 2;
     
     
 	umask(0);
-	return fuse_main(argc, argv, &xmp_oper, NULL);
+	return fuse_main(argc, argv, &xmp_oper, enc_data);
 }
