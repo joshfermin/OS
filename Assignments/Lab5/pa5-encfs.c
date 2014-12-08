@@ -302,7 +302,7 @@ static int encfs_read(const char *path, char *buf, size_t size, off_t offset,
 	
 	//fuse to make directory not root
 	char fpath[PATH_MAX];
-	enfs_fullpath(fpath, path);
+	encfs_fullpath(fpath, path);
 
 	(void) fi;
 	
@@ -486,7 +486,6 @@ int main(int argc, char *argv[])
 {
 	fprintf(stderr, "%d\n", argc);
 	fprintf(stderr, "%s\n", *argv);
-	int fuse_stat;
 	struct encrypt *enc_data;
 
 	// need to check if root is running... If it is return error
@@ -501,18 +500,18 @@ int main(int argc, char *argv[])
     }
 
     // need space for the data
-    encrypt = malloc(sizeof(struct encrypt));
-    if (encrypt == NULL) {
+    enc_data = malloc(sizeof(struct encrypt));
+    if (enc_data == NULL) {
 		perror("main calloc");
 		abort();
     }
 
     // will give path to directory to be mirrored/encrypted
     // i.e.  mirror_dir in pa5-encfs encryption_key mirror_dir mount_point
-    encrypt->root = realpath(arv[argc-2], NULL) 
+    enc_data->root = realpath(argv[argc-2], NULL);
 
     // put key into encrypt struct and then set it up for argc.
-    encrypt->key = argv[argc-3];
+    enc_data->key = argv[argc-3];
 	argv[argc-3] = argv[argc-1];
     argv[argc-2] = NULL;
     argv[argc-1] = NULL;
