@@ -116,7 +116,7 @@ static int encfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 	(void) fi;
 
 	char fpath[PATH_MAX];
-	encfs_fulpath(fpath, path);
+	encfs_fullpath(fpath, path);
 	dp = opendir(fpath);
 	if (dp == NULL)
 		return -errno;
@@ -302,7 +302,7 @@ static int encfs_read(const char *path, char *buf, size_t size, off_t offset,
 	
 	//fuse to make directory not root
 	char fpath[PATH_MAX];
-	xmp_fullpath(fpath, path);
+	enfs_fullpath(fpath, path);
 
 	(void) fi;
 	
