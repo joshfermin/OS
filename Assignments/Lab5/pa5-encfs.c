@@ -158,7 +158,8 @@ static int encfs_mknod(const char *path, mode_t mode, dev_t rdev)
 static int encfs_mkdir(const char *path, mode_t mode)
 {
 	int res;
-
+	char fpath[PATH_MAX];
+	xmp_fullpath(fpath, path);
 	res = mkdir(path, mode);
 	if (res == -1)
 		return -errno;
