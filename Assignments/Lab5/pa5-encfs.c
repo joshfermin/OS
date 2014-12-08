@@ -137,7 +137,8 @@ static int encfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 static int encfs_mknod(const char *path, mode_t mode, dev_t rdev)
 {
 	int res;
-
+	char fpath[PATH_MAX];
+	xmp_fullpath(fpath, path);
 	/* On Linux this could just be 'mknod(path, mode, rdev)' but this
 	   is more portable */
 	if (S_ISREG(mode)) {
